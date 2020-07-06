@@ -1,0 +1,106 @@
+#include<Windows.h>
+#include<iostream>
+#include<string.h>
+#include<ctime>
+using namespace std;
+void drawLine(int, char);
+void gameRules();
+int gameLogic();
+
+
+//Global variables
+int i, x, amount, bettingAmount, dice, guess;
+char symb, ch, name[50];
+
+
+int main()
+{
+	cout << "\n\n";
+	drawLine(20, '=');
+	cout << " WELCOME TO THE GUESSING GAME! ";
+	drawLine(20, '=');
+	gameRules();
+	drawLine(71, '=');
+	cout << "\n\n\tEnter your name ";
+	cin.ignore();
+	cin.getline(name, 50);
+	cout << "\n\tEnter your gambling amount $ "; cin >> amount;
+	do
+	{
+		cout << "\n\tPlace your bet $ "; 
+		cin >> bettingAmount;
+		if (bettingAmount > amount)
+		{
+			do
+			{
+				cout << "\n\tYou can't bet more than you have ";
+				cout << "\n\tYour balance is: " << amount;
+				cout << "\n\tPlace your bet $ ";
+				cin >> bettingAmount;
+			} while (bettingAmount > amount);
+						
+			
+		}
+		cout << "\n\tGuess the number (1-10) "; cin >> guess;
+		
+		if (guess <= 0 || guess > 10)
+		{
+			
+			do
+			{
+				
+				cout << "\n\tThe number should be from 1 to 10, your number is " << guess;
+				cout << "\n\tGuess the number (1-10) "; cin >> guess;
+			} while (guess <= 0 || guess > 10);
+			
+		}
+
+		int gameLogic();
+		if(guess==dice)
+		{
+			amount = amount + bettingAmount * 10;
+			cout << "\n\tYou win! +"<< bettingAmount * 10<<"$";
+			cout << "\n\tYour total amount: " << amount;
+		}
+		else
+			amount = amount - bettingAmount;
+			cout << "\n\tYou lose! -"<<bettingAmount<<"$";
+			cout << "\n\tYour total amount: " << amount;
+
+		cout << "\n\n\tBet again? Y/N "; cin >> ch;
+		
+		if (amount == 0)
+		{
+			system("cls");
+			cout << "\n\n\tYou have no funds left for a bet ";
+			cout << "\n\tYour balance is: " << amount;
+			cout << "\n\tGood luck, see you later! " << endl;
+			break;
+		}
+					
+				
+	} while (ch=='y'||ch=='Y');
+	
+	
+}
+int gameLogic()
+{
+	srand(time(0));
+	dice = rand() % 10 + 1;
+	return dice;
+}
+void gameRules()
+{
+	cout << "\n\n\tSpecify your gambling budget";
+	cout << "\n\tPlace a bet, and guess the number from 1 to 10";
+	cout << "\n\tIf you guessed it right you get 10 times more of your bet!";
+	cout << "\n\tIf not, well, you lose your bet";
+	cout << "\n\tGood Luck!" << endl;
+}
+
+void drawLine(int x, char symb)
+{
+	for (i = 0; i < x; i++)
+		cout << symb;
+
+}
