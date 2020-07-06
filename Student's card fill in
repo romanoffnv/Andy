@@ -1,0 +1,192 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+#include<vector>
+using namespace std;
+
+class student
+{
+	int age, admno;
+	char name[50];
+public:
+	void getData();
+	void getRecord();
+	int retadmno();
+};
+student st;
+
+void student::getData()
+{
+	cout << "\n\t01. Enter you name: ";
+	cin.ignore();
+	cin.getline(name, 50);
+	cout << "\n\t02. Enter your age: "; cin >> age;
+	cout << "\n\t03. Enter your admission number: "; cin >> admno;
+	
+}
+
+void student::getRecord()
+{
+	cout << "\n\t01. Student's name: "; puts(name);
+	cout << "\t02. Students age: " << age;
+	cout << "\n\t03. Students admission number: " << admno << endl;
+}
+
+int student::retadmno()
+{
+	
+	return admno;
+	
+}
+
+int opt;
+char ch;
+
+void mainMenu();
+void fillIn();
+void showInfo();
+
+int main()
+{
+	mainMenu();
+}
+
+void mainMenu()
+{
+	do
+	{
+		system("cls");
+		cout << "\n\n\n\tMAIN MENU";
+		cout << "\n\t01. FILL IN STUDENT'S CARD";
+		cout << "\n\t02. SHOW STUDENT'S CARD";
+		cout << "\n\t03. EXIT";
+		cout << "\n\n\tPlease, choose your option "; cin >> opt;
+
+		switch (opt)
+		{
+		case 1:
+			fillIn();
+			break;
+		case 2:
+			showInfo();
+			break;
+		
+		default: "\a";
+		}
+	} while (opt != 3);
+	cout << "\n\t\n\tThanx for using this program\n" << endl;
+}
+
+void fillIn()
+{
+	
+	do
+	{
+		ofstream outFile;
+		outFile.open("student.dat", ios::binary);
+		do
+		{
+			system("cls");
+			cout << "\n\n\n\tFILL IN STUDENT'S CARD";
+			st.getData();
+			outFile.write(reinterpret_cast<char*>(&st), sizeof(student));
+			
+			cout << "\n\tThe record is made, make another record? Y/N ";
+			cin >> ch;
+			
+		} while (ch == 'y' || ch == 'Y');
+		outFile.close();
+		
+		//Return to main menu
+		cout << "\n\n\tReturn to main menu? Y/N: "; 
+
+		cin >> ch;
+		if (ch == 'n' || ch == 'N')
+		{
+			cout << "\n\tThanx for using this program\n";
+			exit(0);
+		}
+		else if (ch == 'y' || ch == 'Y')
+		{
+			mainMenu();
+		}
+		else
+		{
+			cout << "Invalid input, try again Y/N: ";
+			cin >> ch;
+			
+		}
+		
+	} while (ch == 'n' || ch == 'N');
+	
+	
+	
+}
+
+void showInfo()
+{
+	int id;
+	do
+	{
+		system("cls");
+		cout << "\n\n\n\tSHOW STUDENT'S CARD";
+		do
+		{
+			cout << "\n\tPlease, enter student's admission number: ";
+			cin >> id;
+
+
+			ifstream inFile;
+			inFile.open("student.dat", ios::binary);
+			if (!inFile)
+			{
+				cout << "\n\n\tFile not found";
+				cin.ignore();
+				cin.get();
+				return;
+			}
+			bool flag = false;
+			while (inFile.read(reinterpret_cast<char*>(&st), sizeof(student)))
+			{
+
+				if (id == st.retadmno())
+				{
+					st.getRecord();
+					flag = true;
+				}
+			}
+
+			inFile.close();
+			if (flag == false)
+			{
+				cout << "\n\n\tFile not found";
+				cin.ignore();
+				cin.get();
+			}
+				
+			cout << "\n\tShow another record? Y/N: ";
+			cin >> ch;
+		} while (ch == 'y' || ch == 'Y');
+		
+			
+
+		cout << "\n\n\tReturn to main menu? Y/N: ";
+		cin >> ch;
+		if (ch == 'n' || ch == 'N')
+		{
+			cout << "\n\tThanx for using this program\n";
+			exit(0);
+		}
+		else if (ch == 'y' || ch == 'Y')
+		{
+			mainMenu();
+		}
+		else
+		{
+			cout << "Invalid input, try again Y/N: ";
+			cin >> ch;
+		}
+	} while (ch == 'n' || ch == 'N');
+
+
+}
